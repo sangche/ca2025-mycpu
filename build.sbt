@@ -2,7 +2,7 @@
 // MyCPU is freely redistributable under the MIT License. See the file
 // "LICENSE" for information on usage and redistribution of this file.
 
-ThisBuild / scalaVersion     := "2.13.10"
+ThisBuild / scalaVersion     := "2.13.14"
 ThisBuild / version          := "0.1.0"
 ThisBuild / organization     := "tw.edu.ncku"
 
