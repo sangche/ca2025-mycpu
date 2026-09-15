@@ -3,6 +3,7 @@
 > [!NOTE]
 > Code fragments marked `CA25: Exercise` are intentionally incomplete lab exercises.
 > [0-minimal](0-minimal/) and [4-soc](4-soc/) are complete implementations; other projects require improvements marked with `CA25: Exercise` comments.
+> TOP
 
 This repository presents progressive RISC-V processor implementations in Chisel: single-cycle → interrupt-capable → pipelined → SoC.
 Each lab increases architectural complexity while preserving common verification infrastructure.
