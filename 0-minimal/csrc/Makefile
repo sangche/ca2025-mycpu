@@ -1,4 +1,7 @@
-CROSS_COMPILE ?= $(HOME)/riscv/toolchain/bin/riscv-none-elf-
+# CROSS_COMPILE ?= $(HOME)/riscv/toolchain/bin/riscv-none-elf-
+
+CROSS_COMPILE ?= /work_root/chipyard/.conda-env/riscv-tools/bin/riscv64-unknown-elf-
+
 
 ASFLAGS = -march=rv32i -mabi=ilp32
 CFLAGS = -O0 -Wall -march=rv32i -mabi=ilp32

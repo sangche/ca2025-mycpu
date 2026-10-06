@@ -10,6 +10,9 @@
 #   - check-deps: Validate all dependencies
 
 # RISCOF validation - checks if riscof is available before compliance tests
+
+#HOME := /work_root/chipyard/.conda-env/riscv-tools
+
 .PHONY: check-riscof
 check-riscof:
 	@echo "Validating RISCOF installation..."
@@ -49,7 +52,7 @@ check-riscof:
 .PHONY: check-toolchain
 check-toolchain:
 	@echo "Validating RISC-V toolchain..."
-	@export PATH="$$HOME/rv/toolchain/bin:$$HOME/riscv/toolchain/bin:/opt/riscv/bin:$$PATH"; \
+	#@export PATH="$$HOME/rv/toolchain/bin:$$HOME/riscv/toolchain/bin:/opt/riscv/bin:$$PATH"; \
 	TOOLCHAIN_PREFIXES="riscv-none-elf- riscv32-unknown-elf- riscv64-unknown-elf- riscv32-unknown-linux-gnu- riscv-none-embed-"; \
 	FOUND=0; \
 	for prefix in $$TOOLCHAIN_PREFIXES; do \

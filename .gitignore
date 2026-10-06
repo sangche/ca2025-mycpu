@@ -14,6 +14,7 @@ project/plugins/project/
 *.out
 *.elf
 *.hex
+*.elf
 
 ### Logs and crash dumps
 *.log
@@ -27,6 +28,8 @@ hs_err_pid*
 *.launch
 .vscode/
 .metals/
+.bsp
+.idea
 
 ### OS cruft
 .DS_Store

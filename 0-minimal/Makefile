@@ -11,7 +11,8 @@ OBJ_DIR := $(VERILATOR_DIR)/obj_dir
 
 SIM_TIME ?= 1000000
 SIM_VCD ?= trace.vcd
-JIT_BINARY := $(SRC_DIR)/jit.asmbin
+#JIT_BINARY := $(SRC_DIR)/jit.asmbin
+JIT_BINARY := $(SRC_DIR)/add4.asmbin
 
 # Primary Targets
 .PHONY: all test verilator sim
@@ -24,14 +25,15 @@ test:
 verilator:
 	@mkdir -p $(VERILATOR_DIR)
 	@test -f $(VERILATOR_DIR)/sim.cpp || { echo "ERROR: $(VERILATOR_DIR)/sim.cpp missing"; exit 1; }
-	# The following command assumes verilator is in ~/.local/bin
+# The following command assumes verilator is in ~/.local/bin
 	cd .. && PATH=$$HOME/.local/bin:$$PATH sbt "project minimal" "runMain board.verilator.VerilogGenerator"
 	cd $(VERILATOR_DIR) && verilator --trace --exe --cc sim.cpp Top.v && make -C obj_dir -f VTop.mk CXXFLAGS+="-std=c++17 -Wall"
 
 sim: verilator
 	@echo "Running Verilator simulation for $(JIT_BINARY)..."
 	cd $(OBJ_DIR) && ./VTop -vcd ../../../$(SIM_VCD) -time $(SIM_TIME) -instruction ../../../$(JIT_BINARY)
-	@$(PYTHON) scripts/analyze_trace.py $(SIM_VCD)
+	@$(PYTHON) scripts/analyze_trace_add4.py $(SIM_VCD) 
+# @$(PYTHON) scripts/analyze_trace.py $(SIM_VCD)
 
 
 # Utility Targets

@@ -31,3 +31,5 @@ object VerilogGenerator extends App {
     Array("--target-dir", "0-minimal/verilog/verilator")
   )
 }
+
+// 이거는 TOP 보드가 CPU 만 내장하고 memory 관련 simulation 부분은 sim.cc 에서 처리하려는 의도, right?
