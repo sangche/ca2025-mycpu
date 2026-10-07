@@ -47,3 +47,50 @@ class Add4Test extends AnyFlatSpec with ChiselScalatestTester {
     }
   }
 }
+
+class FooTest extends AnyFlatSpec with ChiselScalatestTester {
+  behavior.of("Minimal CPU - foo Test")
+
+  it should "foo foo..." in {
+    test(new my.Foo) { c =>
+      c.io.a.poke(5.U)
+      for (i <- 0 to 6) {
+        println(s"Cycle $i: a=${c.io.a.peek().litValue}, b=${c.io.b.peek().litValue}, done=${c.io.done.peek().litToBoolean}")
+        c.clock.step(1)
+      }
+      c.reset.poke(true.B)
+      c.clock.step(1)
+      c.reset.poke(false.B)
+      // c.clock.step(1)
+      c.io.a.poke(15.U)
+      for (i <- 0 to 6) {
+        println(s"Cycle $i: a=${c.io.a.peek().litValue}, b=${c.io.b.peek().litValue}, done=${c.io.done.peek().litToBoolean}")
+        c.clock.step(1)
+      }
+    }
+  }
+}
+
+class Foo2Test extends AnyFlatSpec with ChiselScalatestTester {
+  behavior.of("Minimal CPU - foo2 Test")
+
+  it should "foo2 foo2..." in {
+    test(new my.Foo2) { c =>
+      c.io.a.poke(5.U)
+      for (i <- 0 to 6) {
+        println(s"Cycle $i: a=${c.io.a.peek().litValue}, b=${c.io.b.peek().litValue}")
+        c.clock.step(1)
+      }
+      c.reset.poke(true.B)
+      c.clock.step()
+      println(s"reset: a=${c.io.a.peek().litValue}, b=${c.io.b.peek().litValue}}")
+      c.reset.poke(false.B)
+      c.clock.step()
+      c.io.a.poke(15.U)
+      for (i <- 0 to 6) {
+        println(s"Cycle $i: a=${c.io.a.peek().litValue}, b=${c.io.b.peek().litValue}}")
+        c.clock.step(1)
+      }
+    }
+  }
+}
