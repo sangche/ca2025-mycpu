@@ -16,6 +16,9 @@ class TestTopModule(exeFilename: String) extends Module {
     val regs_debug_read_address = Input(UInt(Parameters.PhysicalRegisterAddrWidth))
     val regs_debug_read_data    = Output(UInt(Parameters.DataWidth))
     val mem_debug_read_data     = Output(UInt(Parameters.DataWidth))
+
+    // FOO test
+    val foo_valid_count_test = Output(UInt(32.W))
   })
 
   val mem             = Module(new Memory(8192))
@@ -33,29 +36,16 @@ class TestTopModule(exeFilename: String) extends Module {
   CPU_tick   := CPU_clkdiv === 0.U
   CPU_clkdiv := CPU_next
 
-  // withClock(CPU_tick.asClock) {
-  //   val cpu = Module(new CPU)
-  //   cpu.io.debug_read_address  := 0.U
-  //   cpu.io.instruction_valid   := rom_loader.io.load_finished
-  //   mem.io.instruction_address := cpu.io.instruction_address
-  //   cpu.io.instruction         := mem.io.instruction
-
-  //   when(!rom_loader.io.load_finished) {
-  //     rom_loader.io.bundle <> mem.io.bundle
-  //     cpu.io.memory_bundle.read_data := 0.U
-  //   }.otherwise {
-  //     rom_loader.io.bundle.read_data := 0.U
-  //     cpu.io.memory_bundle <> mem.io.bundle
-  //   }
-
-  //   cpu.io.debug_read_address := io.regs_debug_read_address
-  //   io.regs_debug_read_data   := cpu.io.debug_read_data
-  // }
-
-
   withClock(CPU_tick.asClock) {
     val cpu = Module(new CPU)
     val foo = Module(new Foo)
+
+    // Count foo_valid assertions on CPU clock edges.
+    val fooValidCount = RegInit(0.U(32.W))
+    when(cpu.io.foo_valid) {
+      fooValidCount := fooValidCount + 1.U
+    }
+    io.foo_valid_count_test := fooValidCount
 
     // CPU register -> Foo input
     foo.io.a     := cpu.io.foo_a
