@@ -15,6 +15,9 @@ object InstructionTypes {
   val Store = "b0100011".U(7.W)
   val Auipc = "b0010111".U(7.W)
   val Jalr  = "b1100111".U(7.W)
+
+  // Custom instruction: Foo accelerator
+  val Foo   = "b0001011".U(7.W)
 }
 
 object ALUOp1Source {
@@ -63,10 +66,13 @@ class InstructionDecode extends Module {
   val isAuipc = opcode === InstructionTypes.Auipc // AUIPC
   val isJalr  = opcode === InstructionTypes.Jalr  // JALR
 
+  // custom FOO accelerator instruction
+  val isFoo   = opcode === InstructionTypes.Foo 
+
   // Control Signal Generation
 
   // Register usage
-  val usesRs1  = isLoad || isStore || isOpImm || isJalr
+  val usesRs1  = isLoad || isStore || isOpImm || isJalr || isFoo
   val usesRs2  = isStore
   val regWrite = isLoad || isOpImm || isAuipc || isJalr
 

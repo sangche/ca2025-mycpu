@@ -14,4 +14,10 @@ class CPUBundle extends Bundle {
   val instruction_valid   = Input(Bool())
   val debug_read_address  = Input(UInt(Parameters.PhysicalRegisterAddrWidth))
   val debug_read_data     = Output(UInt(Parameters.DataWidth))
+
+  // Foo accelerator interface
+  val foo_a     = Output(UInt(Parameters.DataWidth))
+  val foo_valid = Output(Bool())
+  val foo_b     = Input(UInt(Parameters.DataWidth))
+  val foo_done  = Input(Bool())
 }

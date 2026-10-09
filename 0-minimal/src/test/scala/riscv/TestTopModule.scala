@@ -8,6 +8,8 @@ import chisel3._
 import riscv.core.CPU
 import riscv.peripheral._
 
+import my.Foo
+
 class TestTopModule(exeFilename: String) extends Module {
   val io = IO(new Bundle {
     val mem_debug_read_address  = Input(UInt(Parameters.AddrWidth))
@@ -31,12 +33,43 @@ class TestTopModule(exeFilename: String) extends Module {
   CPU_tick   := CPU_clkdiv === 0.U
   CPU_clkdiv := CPU_next
 
+  // withClock(CPU_tick.asClock) {
+  //   val cpu = Module(new CPU)
+  //   cpu.io.debug_read_address  := 0.U
+  //   cpu.io.instruction_valid   := rom_loader.io.load_finished
+  //   mem.io.instruction_address := cpu.io.instruction_address
+  //   cpu.io.instruction         := mem.io.instruction
+
+  //   when(!rom_loader.io.load_finished) {
+  //     rom_loader.io.bundle <> mem.io.bundle
+  //     cpu.io.memory_bundle.read_data := 0.U
+  //   }.otherwise {
+  //     rom_loader.io.bundle.read_data := 0.U
+  //     cpu.io.memory_bundle <> mem.io.bundle
+  //   }
+
+  //   cpu.io.debug_read_address := io.regs_debug_read_address
+  //   io.regs_debug_read_data   := cpu.io.debug_read_data
+  // }
+
+
   withClock(CPU_tick.asClock) {
     val cpu = Module(new CPU)
+    val foo = Module(new Foo)
+
+    // CPU register -> Foo input
+    foo.io.a     := cpu.io.foo_a
+    foo.io.valid := cpu.io.foo_valid
+
+    // Foo output -> CPU
+    cpu.io.foo_b    := foo.io.b
+    cpu.io.foo_done := foo.io.done
+
+    // CPU interface
     cpu.io.debug_read_address  := 0.U
     cpu.io.instruction_valid   := rom_loader.io.load_finished
-    mem.io.instruction_address := cpu.io.instruction_address
     cpu.io.instruction         := mem.io.instruction
+    mem.io.instruction_address := cpu.io.instruction_address
 
     when(!rom_loader.io.load_finished) {
       rom_loader.io.bundle <> mem.io.bundle
